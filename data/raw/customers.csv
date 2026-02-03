@@ -1,0 +1,18 @@
+customer_id,customer_name,email,city,registration_date
+CUST101,Budi Santoso, budi.santoso@email.com,Jakarta,2023-06-15
+CUST102,Siti Nurhaliza, siti.n@email.com,Bandung,2023-07-20
+CUST103,Ahmad Wijaya, ahmad.w@email.com,Surabaya,2023-08-10
+CUST104,Dewi Lestari, dewi.l@email.com,Jakarta,2023-09-05
+CUST105,Rudi Hartono, rudi.h@email.com,Yogyakarta,2023-10-12
+CUST106,Linda susanti, linda.linda@email.com,Medan,2023-11-18
+CUST107,Eko Prasetyo, eko.p@email.com,Semarang,2024-12-03
+CUST108,Maya Angelina, maya.a@email.com,Jakarta,2024-01-08
+CUST109,Fajar Nugroho, fajar.n@email.com,Bali,2024-01-15
+CUST110,Rina Kusuma, rina.k@email.com,Bandung,2024-01-20
+CUST111,Tono Sukirman, tono.s@email.com,Jakarta,2024-01-22
+CUST112,Ani Wulandari, ,Surabaya,2024-01-23
+CUST113,Hendra Gunawan, hendra.g@email.com,Makassar,2024-01-23
+CUST114,Sri Wahyuni, sri.w@email.com,Jakarta,2024-01-24
+CUST115,Bambang Hartono, b.hartono@email.com,Palembang,2024-01-24
+CUST116,Citra Dewi, citra.d@email.com,Jakarta,2024-01-25
+CUST117,Dodi Setiawan, d.setiawan@email.com,Bandung,2024-01-26

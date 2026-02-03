@@ -1,0 +1,16 @@
+product_id,product_name,category,price,stock
+PROD201,Laptop Asus ROG, Electronics,15000000,25
+PROD202,Samsung Galaxy S23, Electronics,12000000,25
+PROD203,Nike Air Max, Fashion,12000000,25
+PROD204,Adidas Ultraboost, Fashion,18000000,25
+PROD205,Sony WH-1000XM5, Electronics,45000000,25
+PROD206,Apple Macbook Pro, Electronics,25000000,25
+PROD207,Levi's Jeans, Fashion,650000,25
+PROD208,ipad Air, Electronics,8500000,25
+PROD209,Zara Dress, Fashion,850000,25
+PROD210,Canon EOS R6, Electronics,35000000,25
+PROD211,H&M Jacket, Fashion,550000,25
+PROD212,Bose Speaker, Electronics,3500000,25
+PROD213,Uniqlo T-Shirt, Fashion,250000,25
+PROD214,GoPro Hero 11, Electronics,6500000,25
+PROD215,Puma Sneakers, Fashion,950000,25

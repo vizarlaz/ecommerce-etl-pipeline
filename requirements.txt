@@ -1,0 +1,17 @@
+# ETL Pipeline Requirements
+
+#Data Processing
+pandas==2.1.4
+numpy==1.26.3
+
+#Database
+sqlalchemy==2.0.25
+
+#Scheduling (optional - untuk production)
+#apache-airflow==2.8.0
+
+# Testing
+pytest==7.4.3
+
+#Utilities
+python-dotenv==1.0.0
