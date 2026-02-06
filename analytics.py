@@ -13,6 +13,17 @@ def main():
         'ecommerce_warehouse.db'
     )
 
+    if not os.path.exists(warehouse_db):
+        print("\n" + "="*70)
+        print("⚠️   ERROR: Data warehouse tidak ditemukan!")
+        print("="*70)
+        print("\n Silahkan jalankan ETL pipeline terlebih dahulu:")
+        print(" python run_pipeline.py")
+        print("\n Setelah pipeline selesai, jalankan analytics lagi:")
+        print("="*70 + "\n")
+        return
+
+
     loader = DataLoader(warehouse_db)
 
     print("\n" + "="*70)
@@ -35,12 +46,14 @@ def main():
         ORDER BY total_revenue DESC
         LIMIT 5
     """
+    try:
+        result = loader.execute_query(query)
+        result['total_revenue'] = result['total_revenue'].apply(lambda x: f"Rp {x:,.0f}" if pd.notna(x) else "Rp 0")
+        print(result.to_string(index=False))
+    except Exception as e:
+        print(f" Erorr: {str(e)}")
 
-    result = loader.execute_query(query)
-    result['total_revenue'] = result['total_revenue'].apply(lambda x: f"Rp {x:,.0f}")
-    print(result.to_string(index=False))
-
-
+    
     print("\n 📊 SALES BY CATEGORY")
     print("-"*70)
 
@@ -56,11 +69,13 @@ def main():
         GROUP BY category
         ORDER BY total_revenue DESC
     """
-    result = loader.execute_query(query)
-    result['total_revenue'] = result['total_revenue'].apply(lambda x: f"Rp {x:,.0f}")
-    result['avg_order_value'] = result['avg_order_value'].apply(lambda x: f"Rp {x:,.0f}")
-    print(result.to_string(index=False))
-
+    try:
+        result = loader.execute_query(query)
+        result['total_revenue'] = result['total_revenue'].apply(lambda x: f"Rp {x:,.0f}" if pd.notna(x) else "Rp 0")
+        result['avg_order_value'] = result['avg_order_value'].apply(lambda x: f"Rp {x:,.0f}" if pd.notna(x) else "Rp 0")
+        print(result.to_string(index=False))
+    except Exception as e:
+        print(f" Erorr: {str(e)}")
 
     print("\n 📊 SALES BY CITY")
     print("-"*70)
@@ -77,10 +92,12 @@ def main():
         ORDER BY total_revenue DESC
         LIMIT 5
     """
-    result =loader.execute_query(query)
-    result['total_revenue'] = result['total_revenue'].apply(lambda x: f"Rp {x:,.0f}")
-    print(result.to_string(index=False))
-
+    try:
+        result =loader.execute_query(query)
+        result['total_revenue'] = result['total_revenue'].apply(lambda x: f"Rp {x:,.0f}" if pd.notna(x) else "Rp 0")
+        print(result.to_string(index=False))
+    except Exception as e:
+        print(f" Erorr: {str(e)}")
 
     print("\n 📊 TOP 5 CUSTOMERS BY SPENDING")
     print("-"*70)
@@ -92,16 +109,19 @@ def main():
             COUNT(DISTINCT order_id) as total_orders,
             SUM(total_item_price) as total_spent
         FROM fact_sales
-        WHERE order_status = 'delivered
+        WHERE order_status = 'delivered'
         GROUP BY customer_id, customer_name, city
         ORDER BY total_spent DESC
         LIMIT 5
     """
-
-    result = loader.execute_query(query)
-    result['total_spent'] = result['total_spent'].apply(lambda x: f"Rp {x:,.0f}")
-    print(result.to_string(index=False))
-
+    try:
+        result = loader.execute_query(query)
+        result['total_spent'] = result['total_spent'].apply(lambda x: f"Rp {x:,.0f}" if pd.notna(x) else "Rp 0")
+        print(result.to_string(index=False))
+    except Exception as e:
+        print(f" Erorr: {str(e)}")
+    
+    
     print("\n 📊 ORDER STATUS DISTRIBUTION")
     print("-"*70)
 
@@ -115,11 +135,12 @@ def main():
         GROUP BY order_status
         ORDER BY order_count DESC
     """
-
-    result = loader.execute_query(query)
-    result['percentage'] = result['percentage'].apply(lambda x: f"{x}%")
-    print(result.to_string(index=False))
-
+    try:
+        result = loader.execute_query(query)
+        result['percentage'] = result['percentage'].apply(lambda x: f"{x}%" if pd.notna(x) else "0%")
+        print(result.to_string(index=False))
+    except Exception as e:
+        print(f" Erorr: {str(e)}")
 
     print("\n 📊 DAILY SALES TREND")
     print("-"*70)
@@ -135,10 +156,12 @@ def main():
         ORDER BY date DESC
         LIMIT 10
     """
-
-    result = loader.execute_query(query)
-    result['revenue'] = result['revenue'].apply(lambda x: f"Rp {x:,.0f}")
-    print(result.to_string(index=False))
+    try:
+        result = loader.execute_query(query)
+        result['revenue'] = result['revenue'].apply(lambda x: f"Rp {x:,.0f}" if pd.notna(x) else "Rp 0")
+        print(result.to_string(index=False))
+    except Exception as e:
+        print(f" Erorr: {str(e)}")
 
     print("\n 📊 OVERALL SUMMARY METRICS")
     print("-"*70)
@@ -153,14 +176,30 @@ def main():
         FROM fact_sales
         WHERE order_status = 'delivered'
     """
+    try: 
+        result = loader.execute_query(query)
+        if result.empty or len(result) == 0:
+            print(" Tidak ada data")
+        else:
+            print(f"Total Orders: {result['total_orders'].iloc[0]:,}")
+            print(f"Total Customers: {result['total_customers'].iloc[0]:,}")
+            print(f"Total Products: {result['total_products'].iloc[0]:,}")
 
-    result = loader.execute_query(query)
+            total_rev = result['total_revenue'].iloc[0]
+            avg_val = result['avg_order_value'].iloc[0]
 
-    print(f"Total Orders: {result['total_orders'].iloc[0]:,}")
-    print(f"Total Customers: {result['total_customers'].iloc[0]:,}")
-    print(f"Total Products: {result['total_products'].iloc[0]:,}")
-    print(f"Total Revenue: {result['total_revenue'].iloc[0]:,.0f}")
-    print(f"Average Order Value: Rp {result['avg_order_value'].iloc[0]:,.0f}")
+            if pd.notna(total_rev):
+                print(f"Total Revenue: Rp {total_rev:,.0f}")
+            else:
+                print(f"Total Revenue: Rp 0")
+
+            if pd.notna(avg_val):
+                print(f"Average Order Value: Rp {avg_val:,.0f}")
+            else:
+                print(f"average Order Value: Rp 0")
+    except Exception as e:
+        print(f" Erorr: {str(e)}")
+
 
 
     print("\n" + "="*70)

@@ -112,19 +112,12 @@ class DataTransformer:
 
     def create_fact_sales(self, df_orders, df_order_items, df_customers, df_products):
         logger.info("Creating fact_sales table...")
-        print("DEBUG Orders Head:\n", df_orders[['order_id', 'customer_id']].head())
 
-        df_orders = df_orders.copy()
-        df_order_items = df_order_items.copy()
-        df_customers = df_customers.copy()
-        df_products = df_products.copy()
+        logger.info(f"Available columns in df_customers: {list(df_customers.columns)}")
+        logger.info(f"Available columns in df_orders: {list(df_orders.columns)}")
+        logger.info(f"Available columns in df_order_items: {list(df_order_items.columns)}")
+        logger.info(f"Available columns in df_products: {list(df_products.columns)}")
 
-        for df in [df_orders, df_customers]:
-            df["customer_id"] = df['customer_id'].astype(str).str.strip()
-        for df in [df_orders, df_order_items]:
-            df["order_id"] = df['order_id'].astype(str).str.strip()
-        for df in [df_order_items, df_products]:
-            df["product_id"] = df['product_id'].astype(str).str.strip()
        
 
         try:
@@ -143,7 +136,6 @@ class DataTransformer:
                 how= 'left'
             )
             logger.info(f"Joined with customers: {len(fact)} rows")
-            logger.info(f"Customer NULLs: {fact['customer_name'].isna().sum()}")
         except Exception as e:
             logger.error(f"error joining with customers: {str(e)}")
             raise
@@ -159,7 +151,6 @@ class DataTransformer:
                 how= 'left'
             )
             logger.info(f"Joined with order_items: {len(fact)} rows")
-            logger.info(f"product NULLs: {fact['product_id'].isna().sum()}")
         except Exception as e:
             logger.error(f"error joining with order_items: {str(e)}")
             raise
@@ -174,7 +165,6 @@ class DataTransformer:
                 how= 'left'
             )
             logger.info(f"Joined with products: {len(fact)} rows")
-            logger.info(f"category NULLs: {fact['category'].isna().sum()}")
         except Exception as e:
             logger.error(f"error joining with products: {str(e)}")
             raise
@@ -200,9 +190,6 @@ class DataTransformer:
             raise
 
         logger.info(f"Fact sales table created: {len(fact)} rows, {len(fact.columns)} columns")
-        # Tambahkan ini sebelum 'return fact' di fungsi create_fact_sales
-        print(f"DEBUG: Jumlah baris di fact_sales: {len(fact)}")
-        print(f"DEBUG: Baris dengan total_item_price > 0: {len(fact[fact['total_item_price'] > 0])}")
         return fact
 
     def transform_all(self, raw_data):
